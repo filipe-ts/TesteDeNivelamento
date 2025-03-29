@@ -6,6 +6,8 @@
 
 ./Teste-01/src/compressed/anexos/
 
+*.DS_store
+
 __pycache__/
 *.py[cod]
 
