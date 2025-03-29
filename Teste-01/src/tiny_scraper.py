@@ -2,6 +2,9 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup as bs
 import re
 import requests
+import os
+import zipfile
+import pathlib
 
 # extrai o html do site
 url = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
@@ -20,8 +23,19 @@ result = soup.find_all("a", string=pattern_str, href=pattern_href)
 pdf_links = [item.get('href') for item in result]
 
 # faz o download
-responses = [requests.get(link) for link in pdf_links]
+pdf_blobs = [requests.get(link).content for link in pdf_links]
 
-for response in responses:
-    pdf_blob = response.content
-    print(pdf_blob)
+# salva os pdfs na pasta /data
+files = []
+for index, blob in enumerate(pdf_blobs):
+    file_name = f'{os.getcwd()}/data/{pdf_links[index].split("/")[-1]}'
+    files.append(file_name)
+    with open(file_name, 'wb') as f:
+        f.write(blob)
+
+# salvando os arquivos em um zip na pasta compressed
+with zipfile.ZipFile(f"{os.getcwd()}/compressed/anexos.zip", 'w') as zf:
+    data_directory = pathlib.Path(f"{os.getcwd()}/data/")
+    for file_path in data_directory.iterdir():
+        if file_path.name.endswith(".pdf"):
+            zf.write(file_path, file_path.name)

@@ -4,6 +4,8 @@
 *.zip
 .idea/
 
+./Teste-01/src/compressed/anexos/
+
 __pycache__/
 *.py[cod]
 
