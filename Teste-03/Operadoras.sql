@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS operadora (
+    id SERIAL PRIMARY KEY,
+    Registro_ANS VARCHAR(6) UNIQUE NOT NULL CHECK (Registro_ANS ~ '^[0-9]+$'),
+    CNPJ VARCHAR(14) UNIQUE NOT NULL CHECK (CNPJ ~ '^[0-9]+$'),
+    Razao_Social VARCHAR(140) NOT NULL,
+    Nome_Fantasia VARCHAR(140),
+    Modalidade VARCHAR(50) NOT NULL,
+    Logradouro VARCHAR(40) NOT NULL,
+    Numero VARCHAR(20) NOT NULL,
+    Complemento VARCHAR(40),
+    Bairro VARCHAR(30) NOT NULL,
+    Cidade VARCHAR(30) NOT NULL,
+    UF VARCHAR(2) NOT NULL,
+    CEP VARCHAR(8) NOT NULL CHECK (CEP ~ '^[0-9]+$') ,
+    DDD VARCHAR(2) CHECK (DDD ~ '^[0-9]+$') ,
+    Telefone VARCHAR(20) CHECK (Telefone ~ '^[0-9]+$') ,
+    Fax VARCHAR(20) CHECK (Fax ~ '^[0-9]+$') ,
+    Endereco_eletronico VARCHAR(255) ,
+    Representante VARCHAR(50) NOT NULL,
+    Cargo_Representante VARCHAR(40) NOT NULL,
+    Regiao_de_Comercializacao INTEGER CHECK (Regiao_de_Comercializacao < 7 AND Regiao_de_Comercializacao > 0),
+    Data_Registro_ANS DATE NOT NULL
+)
