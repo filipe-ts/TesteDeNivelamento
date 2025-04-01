@@ -10,5 +10,5 @@ SELECT p.id, p.registro_ans, p.razao_social, (-1* (dc.vl_saldo_final - dc.vl_sal
                     )
                         ) AS dc
     ON p.registro_ans = dc.reg_ans
-    ORDER BY GASTO
+    ORDER BY GASTO desc
     LIMIT 10;
