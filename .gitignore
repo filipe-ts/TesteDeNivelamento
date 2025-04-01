@@ -5,6 +5,7 @@
 .idea/
 
 ./Teste-01/src/compressed/anexos/
+Teste-03/Data/**/*.csv
 
 *.DS_store
 
