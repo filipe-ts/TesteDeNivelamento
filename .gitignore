@@ -4,6 +4,8 @@
 *.zip
 .idea/
 
+Teste-04/node_modules/
+
 ./Teste-01/src/compressed/anexos/
 Teste-03/Data/**/*.csv
 
