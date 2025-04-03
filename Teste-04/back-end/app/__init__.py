@@ -7,8 +7,8 @@ import pandas as pd
 def create_app(config_class = Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    CORS(app, resources={"/*": {"origins": "*"}})
-
+    # CORS(app, resources={"/*": {"origins": "*"}})
+    CORS(app)
     # carregando csv
     app.df = pd.read_csv(app.config['CSV_PATH'], delimiter=';')
 
