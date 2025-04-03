@@ -59,7 +59,7 @@ def search_by():
         end_idx = start_idx + per_page
         paginated_results = search_result.iloc[start_idx:end_idx]
 
-        return jsonify({"operadoras": paginated_results.to_dict(orient="records"),
+        return jsonify({"operadoras": paginated_results.fillna('').to_dict(orient="records"),
                 "pagination": {
                     "total_items": total_items,
                     "total_pages": total_pages,
@@ -70,6 +70,8 @@ def search_by():
                   }
                 }), 200
     except BadRequest as e:
+        print(e)
         abort(400, str(e.description))
     except Exception as e:
+        print(e)
         abort(500, str(e))
