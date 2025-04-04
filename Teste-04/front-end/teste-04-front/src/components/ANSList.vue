@@ -35,7 +35,7 @@ const prettyCEP = (cep: string) => {
         <li :class="index%2 === 0 ? 'par' : 'impar' " v-for="(operadora, index) in operadoras" :key="operadora.CNPJ">
           <div class="item">
             <div class="cnpj">
-             CNPJ: {{prettyCNPJ(operadora.CNPJ.toString())}}
+             CNPJ: {{prettyCNPJ(operadora.CNPJ.toString())}} | Registro na ANS: {{operadora.Registro_ANS}}
             </div>
             <div class="razaoSocial">
               Razão Social: {{operadora.Razao_Social}}

@@ -18,7 +18,7 @@ def columns():
 
 @bp.route('/search/', methods=['POST'])
 def search_by():
-    search_args = ['CNPJ', 'Razao_Social', 'Nome_Fantasia']
+    search_args = ['CNPJ', 'Razao_Social', 'Nome_Fantasia', 'Registro_ANS']
     try:
         if not request.is_json:
             raise BadRequest("no json was given")

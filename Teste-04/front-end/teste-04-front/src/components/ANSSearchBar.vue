@@ -15,7 +15,7 @@ const inputMode = computed(()=>{
 })
 
 const inputPatten = computed(()=>{
-  if(searchType.value === searchTypes.CNPJ){
+  if(searchType.value === searchTypes.CNPJ || searchType.value === searchTypes.REGISTRO_ANS){
     return '[0-9]*'
   }
   return ''
@@ -29,6 +29,8 @@ const searchHint = computed(() => {
       return 'RAZÃO SOCIAL: REDE MEDICA LTDA'
     case searchTypes.NOME_FANTASIA:
       return 'NOME FANTASIA: REDE MEDICA NORDESTE'
+    case searchTypes.REGISTRO_ANS:
+      return 'REGISTRO NA ANS: 4123456'
   }
 })
 
@@ -41,7 +43,7 @@ const extraHintClass = computed(() => {
 
 const inputSanitization = (e : Event) => {
   const input = e.target as HTMLInputElement;
-  if (searchType.value === searchTypes.CNPJ){
+  if (searchType.value === searchTypes.CNPJ || searchType.value === searchTypes.REGISTRO_ANS){
     input.value = input.value.replace(/\D/g, '');
     searchString.value = input.value;
   } else {
@@ -50,7 +52,7 @@ const inputSanitization = (e : Event) => {
 }
 
 const clearCNPJIfNeeded = () => {
-  if (searchType.value === searchTypes.CNPJ){
+  if (searchType.value === searchTypes.CNPJ || searchType.value === searchTypes.REGISTRO_ANS){
     searchString.value = searchString.value.replace(/\D/g, '');
   }
 }
@@ -82,6 +84,7 @@ watch(searchString, () => {
         />
     <select class="select-search" @change="clearCNPJIfNeeded" v-model="searchType">
       <option :value="searchTypes.CNPJ" selected >CNPJ</option>
+      <option :value="searchTypes.REGISTRO_ANS">Registro na ANS</option>/
       <option :value="searchTypes.RAZAO_SOCIAL">Razão Social</option>
       <option :value="searchTypes.NOME_FANTASIA">Nome Fantasia</option>
     </select>
