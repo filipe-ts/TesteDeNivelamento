@@ -75,4 +75,8 @@ defineExpose({
   width: 8rem;
   background-color: #55ec93;
 }
+
+.btn:disabled{
+  background-color: #b8b8b8;
+}
 </style>

@@ -111,6 +111,8 @@ watch(searchString, () => {
 
 .search-input{
   width: calc(100% - 10rem);
+  font-size: 12pt;
+  padding-left: 0.5rem;
 }
 
 .select-search{
@@ -119,5 +121,6 @@ watch(searchString, () => {
 
 .extraHintClass{
   color: gray;
+  margin-bottom: 0.5rem;
 }
 </style>
