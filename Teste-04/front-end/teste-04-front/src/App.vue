@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import { ref, computed, watch } from 'vue'
 import ANSSearchBar from "@/components/ANSSearchBar.vue";
 import ANSBtn from "@/components/ANSBtn.vue";
+import ANSList from "@/components/ANSList.vue";
+import ANSPageNav from "@/components/ANSPageNav.vue";
 import { searchTypes } from "@/model/searchTypes.ts";
 import { fetchOperadoras } from "@/services/fetchOperadoras.ts";
 
@@ -16,23 +18,34 @@ const hasResults = computed(() => {
 });
 
 const operadoras = ref<Array<any>>([]);
+const pagination = ref({
+  current_page: 1,
+  has_next: false,
+  has_previous: false,
+  per_page: 20,
+  total_items: 0,
+  total_pages: 1
+});
+
+
+const hasMultiplePages = computed(() => {
+  return pagination.value.total_pages > 1;
+})
 
 const printStates = () => {
   console.log(searchType.value)
   console.log(searchString.value)
 };
 
-watch(hasResults, () => {console.log(hasResults.value)});
 watch(response, (newValue) => {
-  console.log(typeof newValue === "string");
-  console.log(newValue);
-  newValue.operadoras !== undefined? operadoras.value = newValue.operadoras : null;
-  console.log(operadoras.value);
+  if (newValue.operadoras !== undefined){
+     operadoras.value = newValue.operadoras;
+     pagination.value = newValue.pagination;
+     console.log(pagination.value.current_page);
+  }
 });
 
-const prettyCNPJ = (cnpj: string) => {
-  return cnpj.slice(0,2) + "." + cnpj.slice(2,5) + "." + cnpj.slice(5,8) + "/" + cnpj.slice(8,12) + "-" + cnpj.slice(12,14);
-}
+
 </script>
 
 <template>
@@ -48,20 +61,14 @@ const prettyCNPJ = (cnpj: string) => {
               @response="(msg) => response = msg"
               @error="(msg) => error = msg" />
   </search>
+  <ANSPageNav :search-string="searchString"
+              :search-type="searchType"
+              :pagination="pagination"
+              @response="(msg) => response = msg" />
   <section>
-      <ol v-if="operadoras.length > 0" class="list">
-        <li v-for="operadora in operadoras" :key="operadora.CNPJ">
-          <div class="cnpj">
-             CNPJ: {{prettyCNPJ(operadora.CNPJ.toString())}}
-          </div>
-          <div class="razaoSocial">
-            Razão Social: {{operadora.Razao_Social}}
-          </div>
-          <div :class="operadora.Nome_Fantasia ? 'nomeFantasia' : 'none' "></div>
-           Nome Fantasia: {{operadora.Nome_Fantasia}}
-        </li>
-      </ol>
+      <ANSList :operadoras="operadoras" />
   </section>
+
 
 <!--      <nav>-->
 <!--        <RouterLink to="/">Home</RouterLink>-->
@@ -71,7 +78,8 @@ const prettyCNPJ = (cnpj: string) => {
 </template>
 
 <style scoped>
-.none{
-  display: none;
+.transparent{
+  opacity: 0;
 }
+
 </style>

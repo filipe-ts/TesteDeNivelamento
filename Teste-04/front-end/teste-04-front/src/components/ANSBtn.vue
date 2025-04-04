@@ -31,6 +31,7 @@ const fetchData = async () => {
     errorMessage.value = response;
   } else {
     responseData.value = response;
+    console.log(responseData.value);
   }
 }
 
