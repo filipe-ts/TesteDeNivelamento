@@ -20,7 +20,8 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['response', 'error'])
+
+const emit = defineEmits(['response', 'error', 'searchEnable'])
 
 const responseData = ref(null);
 const errorMessage = ref('');
@@ -38,13 +39,15 @@ const fetchData = async () => {
 const invalidCNPJSearchs = ["000", "0001"];
 const isSearchEnable = computed(() => {
   if (props.searchType !== searchTypes.CNPJ && props.searchString.length > 2) {
+    emit('searchEnable', true);
     return true
   }
 
   if (props.searchType === searchTypes.CNPJ && !invalidCNPJSearchs.includes(props.searchString) && props.searchString.length > 2) {
+    emit('searchEnable', true);
     return true
   }
-
+  emit('searchEnable', false);
   return false
 });
 
@@ -55,14 +58,21 @@ watch(responseData, () => {
 watch(errorMessage, () => {
   emit('error', errorMessage.value);
 })
+
+defineExpose({
+  click: fetchData
+});
 </script>
 
 <template>
-      <button @click="fetchData" :disabled="!isSearchEnable">
+      <button class="btn" @click="fetchData" :disabled="!isSearchEnable">
         Buscar
       </button>
 </template>
 
 <style scoped>
-
+.btn{
+  width: 8rem;
+  background-color: #55ec93;
+}
 </style>

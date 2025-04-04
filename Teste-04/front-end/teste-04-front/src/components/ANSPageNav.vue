@@ -31,12 +31,12 @@ const prevPage = async () => {
 
 <template>
 <nav :class="props.pagination.total_pages > 1 ? 'pageSelector' : 'transparent' ">
-    <button :disabled="!pagination.has_previous"
+    <button class="btn" :disabled="!pagination.has_previous"
             @click="prevPage">
       <
     </button>
     {{ pagination.current_page}} / {{ pagination.total_pages}}
-    <button :disabled="!pagination.has_next"
+    <button class="btn" :disabled="!pagination.has_next"
             @click="nextPage">
       >
     </button>
@@ -48,6 +48,12 @@ const prevPage = async () => {
   display: none;
 }
 .pageSelector{
+  display: flex;
+  gap: 1rem;
+  color: #ffffff;
+}
 
+.btn{
+  background-color: #55ec93;
 }
 </style>

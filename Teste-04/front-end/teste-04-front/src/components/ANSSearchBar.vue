@@ -2,7 +2,7 @@
  import { ref, computed, watch } from 'vue'
  import { searchTypes } from "@/model/searchTypes.ts";
 
- const emit = defineEmits(['searchType', 'searchString'])
+ const emit = defineEmits(['searchType', 'searchString', 'searchRequested'])
 
 const searchType = ref(searchTypes.CNPJ)
 const searchString = ref("");
@@ -24,11 +24,11 @@ const inputPatten = computed(()=>{
 const searchHint = computed(() => {
   switch (searchType.value) {
     case searchTypes.CNPJ:
-      return 'EX: 12345678000199'
+      return 'CNPJ: 12345678000199'
     case searchTypes.RAZAO_SOCIAL:
-      return 'EX: REDE MEDICA LTDA'
+      return 'RAZÃO SOCIAL: REDE MEDICA LTDA'
     case searchTypes.NOME_FANTASIA:
-      return 'EX: REDE MEDICA NORDESTE'
+      return 'NOME FANTASIA: REDE MEDICA NORDESTE'
   }
 })
 
@@ -66,27 +66,55 @@ watch(searchString, () => {
 </script>
 
 <template>
-  <div :class="extraHintClass">
-    {{searchHint}}
+  <div class="container">
+    <div :class="extraHintClass">
+      {{searchHint}}
+    </div>
+    <div class="bottom">
+    <input class="search-input"
+               type="text"
+               :pattern="inputPatten"
+               :inputmode="inputMode"
+               :placeholder="searchHint"
+               v-model="searchString"
+               @input="inputSanitization"
+               @keyup.enter="$emit('searchRequested')"
+        />
+    <select class="select-search" @change="clearCNPJIfNeeded" v-model="searchType">
+      <option :value="searchTypes.CNPJ" selected >CNPJ</option>
+      <option :value="searchTypes.RAZAO_SOCIAL">Razão Social</option>
+      <option :value="searchTypes.NOME_FANTASIA">Nome Fantasia</option>
+    </select>
+    </div>
   </div>
-  <input class="search-input"
-             type="text"
-             :pattern="inputPatten"
-             :inputmode="inputMode"
-             :placeholder="searchHint"
-             v-model="searchString"
-             @input="inputSanitization"
-      />
-  <select class="select-search" @change="clearCNPJIfNeeded" v-model="searchType">
-    <option :value="searchTypes.CNPJ" selected >CNPJ</option>
-    <option :value="searchTypes.RAZAO_SOCIAL">Razão Social</option>
-    <option :value="searchTypes.NOME_FANTASIA">Nome Fantasia</option>
-  </select>
 </template>
 
 <style scoped>
 .disabled{
-  display: none;
+  opacity: 0;
+}
+
+.container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.bottom{
+  display: flex;
+  gap: 1rem;
+  height: 50%;
+
+}
+
+.search-input{
+  width: calc(100% - 10rem);
+}
+
+.select-search{
+  width: 8rem;
 }
 
 .extraHintClass{
