@@ -10,7 +10,7 @@ def create_app(config_class = Config):
     # CORS(app, resources={"/*": {"origins": "*"}})
     CORS(app)
     # carregando csv
-    app.df = pd.read_csv(app.config['CSV_PATH'], delimiter=';')
+    app.df = pd.read_csv(app.config['CSV_PATH'], delimiter=';', dtype=str)
 
     # Register blueprints here
     from blueprints.operadoras import bp as operadoras_bp

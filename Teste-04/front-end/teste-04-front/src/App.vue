@@ -4,6 +4,7 @@ import { ref, computed, watch } from 'vue'
 import ANSSearchBar from "@/components/ANSSearchBar.vue";
 import ANSBtn from "@/components/ANSBtn.vue";
 import { searchTypes } from "@/model/searchTypes.ts";
+import { fetchOperadoras } from "@/services/fetchOperadoras.ts";
 
 const searchType = ref(searchTypes.CNPJ);
 const searchString = ref("");
@@ -29,6 +30,9 @@ watch(response, (newValue) => {
   console.log(operadoras.value);
 });
 
+const prettyCNPJ = (cnpj: string) => {
+  return cnpj.slice(0,2) + "." + cnpj.slice(2,5) + "." + cnpj.slice(5,8) + "/" + cnpj.slice(8,12) + "-" + cnpj.slice(12,14);
+}
 </script>
 
 <template>
@@ -36,7 +40,7 @@ watch(response, (newValue) => {
     Busca ANS
   </header>
   <search>
-      <ANSSearchBar @searchType="(msg) => console.log(msg)"
+      <ANSSearchBar @searchType="(msg) => searchType = msg"
                     @searchString="(msg) => searchString = msg"
       />
       <ANSBtn :search-string="searchString"
@@ -47,7 +51,14 @@ watch(response, (newValue) => {
   <section>
       <ol v-if="operadoras.length > 0" class="list">
         <li v-for="operadora in operadoras" :key="operadora.CNPJ">
-          {{operadora.CNPJ}}
+          <div class="cnpj">
+             CNPJ: {{prettyCNPJ(operadora.CNPJ.toString())}}
+          </div>
+          <div class="razaoSocial">
+            Razão Social: {{operadora.Razao_Social}}
+          </div>
+          <div :class="operadora.Nome_Fantasia ? 'nomeFantasia' : 'none' "></div>
+           Nome Fantasia: {{operadora.Nome_Fantasia}}
         </li>
       </ol>
   </section>
@@ -60,5 +71,7 @@ watch(response, (newValue) => {
 </template>
 
 <style scoped>
-
+.none{
+  display: none;
+}
 </style>

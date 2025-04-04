@@ -3,6 +3,7 @@ import {computed, ref, watch} from "vue";
 import { searchTypes } from "@/model/searchTypes.ts";
 import axios from 'axios'
 import type { SearchRequest } from "@/model/searchRequest";
+import { fetchOperadoras } from "@/services/fetchOperadoras.ts"
 
 const props = defineProps({
   searchType:{
@@ -25,27 +26,13 @@ const responseData = ref(null);
 const errorMessage = ref('');
 
 const fetchData = async () => {
-    const requestPayload: SearchRequest = {
-    search: props.searchType,
-    value: props.searchString
-  };
-  try {
-    const params = {
-      page: String(props.desiredPage ? Number(props.desiredPage) : 1),
-      per_page: String(20)
-    };
-    const response = await axios.post('/api/operadoras/search/', requestPayload,   {
-        params: {
-          page: params.page.toString(),
-          per_page: params.per_page.toString()
-        }
-      });
-    responseData.value = response.data;
-  } catch (error: any) {
-    errorMessage.value = 'Error fetching data: ' + error.message;
+  const response = await fetchOperadoras(props.searchType, props.searchString, props?.desiredPage);
+  if (typeof(response) === "string") {
+    errorMessage.value = response;
+  } else {
+    responseData.value = response;
   }
 }
-
 
 const invalidCNPJSearchs = ["000", "0001"];
 const isSearchEnable = computed(() => {
