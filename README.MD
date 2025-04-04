@@ -79,7 +79,7 @@ python csv_sanitizer.py
 ```
 2. Executar scripts .sql:
 ```bash
-# URI para consulta do banco tembo: 
+# URI para consulta do banco tembo: postgresql://readonly:7iaAxSNMcUjhJC2l@suavely-developed-whitebait.data-1.use1.tembo.io:5432/postgres
 psql -<URI> -f CriarTabelas.sql
 psql -<URI> -f query-ultimo-ano.sql
 psql -<URI> -f query-ultimo-trimestre.sql
